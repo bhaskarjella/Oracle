@@ -1,0 +1,66 @@
+SELECT
+    USERNAME,
+    ACCOUNT_STATUS,
+    LAST_LOGIN,
+    LOCK_DATE,
+    EXPIRY_DATE,
+    CREATED
+FROM
+    DBA_USERS
+ORDER BY
+    USERNAME;
+    
+===========================================================================================
+
+SELECT
+    username,
+    account_status,
+    last_login
+FROM
+    dba_users
+WHERE
+    last_login < SYSDATE - 365
+    AND account_status LIKE 'OPEN%'
+ORDER BY
+    last_login;
+    
+============================================================================================
+
+SELECT
+    'ALTER USER "' || username || '" ACCOUNT LOCK;' AS lock_command
+FROM
+    dba_users
+WHERE
+    last_login < SYSDATE - 365
+    AND account_status LIKE 'OPEN%';
+    
+============================================================================================
+
+
+SELECT
+    username,
+    account_status,
+    created,
+    last_login
+FROM
+    dba_users
+WHERE
+    account_status = 'OPEN'
+    AND last_login IS NULL
+ORDER BY
+    created;
+    
+    
+=============================================================================================
+
+SELECT
+    'ALTER USER "' || username || '" ACCOUNT LOCK;' AS lock_command
+FROM
+    dba_users
+WHERE
+    account_status = 'OPEN'
+    AND last_login IS NULL;
+    
+======================================================================================    
+
+ALTER USER HYDRAA ACCOUNT LOCK;
